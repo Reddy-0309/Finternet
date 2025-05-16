@@ -1,0 +1,132 @@
+version: '3.8'
+
+services:
+  # Frontend service
+  frontend:
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - REACT_APP_API_URL=http://localhost:8000/api
+    depends_on:
+      - auth-service
+      - asset-service
+      - ledger-service
+      - payment-service
+
+  # Auth Service
+  auth-service:
+    build:
+      context: ../backend/auth-service
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - PORT=8000
+      - ENV=development
+      - JWT_SECRET=finternet-auth-service-secret-key
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=finternet_auth
+    depends_on:
+      - postgres
+
+  # Asset Service
+  asset-service:
+    build:
+      context: ../backend/asset-service
+      dockerfile: Dockerfile
+    ports:
+      - "8001:8001"
+    environment:
+      - PORT=8001
+      - ENV=development
+      - JWT_SECRET=finternet-auth-service-secret-key
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=finternet_assets
+    depends_on:
+      - postgres
+
+  # Ledger Service
+  ledger-service:
+    build:
+      context: ../backend/ledger-service
+      dockerfile: Dockerfile
+    ports:
+      - "8002:8002"
+    environment:
+      - PORT=8002
+      - RUST_LOG=info
+      - JWT_SECRET=finternet-auth-service-secret-key
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=finternet_ledger
+    depends_on:
+      - postgres
+
+  # Payment Service
+  payment-service:
+    build:
+      context: ../backend/payment-service
+      dockerfile: Dockerfile
+    ports:
+      - "8003:8003"
+    environment:
+      - PORT=8003
+      - RUST_LOG=info
+      - JWT_SECRET=finternet-auth-service-secret-key
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=finternet_payments
+    depends_on:
+      - postgres
+
+  # Blockchain Node (Hardhat for Ethereum development)
+  blockchain-node:
+    build:
+      context: ../blockchain/solidity
+      dockerfile: Dockerfile.hardhat
+    ports:
+      - "8545:8545"
+    environment:
+      - HARDHAT_NETWORK=localhost
+    volumes:
+      - ../blockchain/solidity:/app
+
+  # PostgreSQL Database
+  postgres:
+    image: postgres:14-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_MULTIPLE_DATABASES=finternet_auth,finternet_assets,finternet_ledger,finternet_payments
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./postgres-init:/docker-entrypoint-initdb.d
+
+  # pgAdmin for database management
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    ports:
+      - "5050:80"
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@finternet.com
+      - PGADMIN_DEFAULT_PASSWORD=admin
+    depends_on:
+      - postgres
+
+volumes:
+  postgres-data:

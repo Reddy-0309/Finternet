@@ -1,0 +1,73 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  margin: 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+/* Dark mode improvements for better text visibility */
+@layer base {
+  .dark {
+    --color-primary-text: 255, 255, 255;
+    --color-secondary-text: 209, 213, 219;
+    --color-tertiary-text: 156, 163, 175;
+    --color-background: 17, 24, 39;
+    --color-surface: 31, 41, 55;
+    --color-border: 75, 85, 99;
+  }
+  
+  :root {
+    --color-primary-text: 17, 24, 39;
+    --color-secondary-text: 55, 65, 81;
+    --color-tertiary-text: 107, 114, 128;
+    --color-background: 249, 250, 251;
+    --color-surface: 255, 255, 255;
+    --color-border: 229, 231, 235;
+  }
+}
+
+/* Enhanced contrast for dark mode text */
+.dark {
+  color-scheme: dark;
+}
+
+.dark h1, .dark h2, .dark h3, .dark h4, .dark h5, .dark h6 {
+  color: rgba(var(--color-primary-text), 1);
+}
+
+.dark p, .dark span, .dark div {
+  color: rgba(var(--color-secondary-text), 1);
+}
+
+/* Improved focus styles for better accessibility */
+*:focus-visible {
+  outline: 2px solid rgba(99, 102, 241, 0.6);
+  outline-offset: 2px;
+}
+
+/* Smooth transitions for theme changes */
+* {
+  transition-property: background-color, border-color, color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+/* Improved contrast for links in dark mode */
+.dark a:not(.btn) {
+  color: rgba(129, 140, 248, 1);
+}
+
+.dark a:hover:not(.btn) {
+  color: rgba(165, 180, 252, 1);
+}
