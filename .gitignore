@@ -31,6 +31,8 @@ yarn-error.log*
 *.test
 *.out
 go.work
+*.msi
+go*.windows-amd64.msi
 
 # Rust
 /target/
