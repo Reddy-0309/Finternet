@@ -9,6 +9,8 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  color: rgba(var(--color-secondary-text), 1);
+  background-color: rgba(var(--color-background), 1);
 }
 
 code {
@@ -25,6 +27,8 @@ code {
     --color-background: 17, 24, 39;
     --color-surface: 31, 41, 55;
     --color-border: 75, 85, 99;
+    --color-link: 129, 140, 248;
+    --color-link-hover: 165, 180, 252;
   }
   
   :root {
@@ -34,6 +38,8 @@ code {
     --color-background: 249, 250, 251;
     --color-surface: 255, 255, 255;
     --color-border: 229, 231, 235;
+    --color-link: 79, 70, 229;
+    --color-link-hover: 67, 56, 202;
   }
 }
 
@@ -44,10 +50,6 @@ code {
 
 .dark h1, .dark h2, .dark h3, .dark h4, .dark h5, .dark h6 {
   color: rgba(var(--color-primary-text), 1);
-}
-
-.dark p, .dark span, .dark div {
-  color: rgba(var(--color-secondary-text), 1);
 }
 
 /* Improved focus styles for better accessibility */
@@ -64,10 +66,10 @@ code {
 }
 
 /* Improved contrast for links in dark mode */
-.dark a:not(.btn) {
-  color: rgba(129, 140, 248, 1);
+main a {
+  color: rgba(var(--color-link), 1);
 }
 
-.dark a:hover:not(.btn) {
-  color: rgba(165, 180, 252, 1);
+main a:hover {
+  color: rgba(var(--color-link-hover), 1);
 }
